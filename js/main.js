@@ -6,6 +6,25 @@ window.addEventListener('load', function() {
     }, 1000);
 });
 
+// ==================== PROFILE IMAGE LOADING ====================
+document.addEventListener('DOMContentLoaded', function() {
+    const profileImg = document.querySelector('.profile-img');
+    if (profileImg) {
+        // Add loading class initially
+        profileImg.classList.add('loading');
+        
+        // Remove loading class when image is loaded
+        profileImg.addEventListener('load', function() {
+            profileImg.classList.remove('loading');
+        });
+        
+        // If image is already cached and loaded
+        if (profileImg.complete) {
+            profileImg.classList.remove('loading');
+        }
+    }
+});
+
 // ==================== NAVBAR SCROLL ====================
 const navbar = document.getElementById('navbar');
 const navLinks = document.querySelectorAll('.nav-link');
