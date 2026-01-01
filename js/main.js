@@ -4,28 +4,53 @@ if ('scrollRestoration' in history) {
     history.scrollRestoration = 'manual';
 }
 
-// Force scroll to top immediately
+// Remove any hash from URL that might cause auto-scroll
+if (window.location.hash) {
+    // Use replaceState to remove hash without causing a history entry
+    history.replaceState(null, null, window.location.pathname);
+}
+
+// Force scroll to top immediately before anything else loads
+document.documentElement.scrollTop = 0;
+document.body.scrollTop = 0;
 window.scrollTo(0, 0);
 
 // Also force on page show (handles back/forward navigation)
 window.addEventListener('pageshow', function(event) {
+    if (window.location.hash) {
+        history.replaceState(null, null, window.location.pathname);
+    }
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
     window.scrollTo(0, 0);
 });
 
 // ==================== PRELOADER ====================
 window.addEventListener('load', function() {
-    // Ensure we're at the top
+    // Ensure we're at the top after load
+    if (window.location.hash) {
+        history.replaceState(null, null, window.location.pathname);
+    }
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
     window.scrollTo(0, 0);
     
     const preloader = document.getElementById('preloader');
     setTimeout(function() {
         preloader.classList.add('hide');
+        // Enable smooth scrolling after preloader is hidden
+        document.documentElement.classList.add('loaded');
     }, 1000);
 });
 
 // ==================== PROFILE IMAGE LOADING ====================
 document.addEventListener('DOMContentLoaded', function() {
-    // Force scroll to top on DOM ready as well
+    // Force scroll to top on DOM ready and clear hash
+    if (window.location.hash) {
+        history.replaceState(null, null, window.location.pathname);
+    }
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
     window.scrollTo(0, 0);
     
     const profileImg = document.querySelector('.profile-img');
@@ -134,7 +159,6 @@ const texts = [
     'Software Developer Engineer',
     'Backend Developer',
     'AI Integration Specialist',
-    'Test Automation Expert',
     'Competitive Programmer',
     'Problem Solver'
 ];
@@ -179,6 +203,7 @@ let counterAnimated = false;
 function animateCounters() {
     counters.forEach(counter => {
         const target = parseInt(counter.getAttribute('data-target'));
+        const name = counter.getAttribute('data-name');
         const duration = 2000; // 2 seconds
         const increment = target / (duration / 16); // 60 FPS
         let current = 0;
@@ -186,10 +211,10 @@ function animateCounters() {
         const updateCounter = () => {
             current += increment;
             if (current < target) {
-                counter.textContent = Math.floor(current) + (target >= 1000 ? '+' : '%');
+                counter.textContent = Math.floor(current) + (name == "Problems Solved" ? '+' : '');
                 requestAnimationFrame(updateCounter);
             } else {
-                counter.textContent = target + (target >= 1000 ? '+' : '%');
+                counter.textContent = target + (name == "Problems Solved" ? '+' : '');
             }
         };
         

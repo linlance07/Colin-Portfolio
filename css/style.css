@@ -26,9 +26,14 @@
 }
 
 html {
-    scroll-behavior: smooth;
+    scroll-behavior: auto; /* Initially set to auto to prevent smooth scroll on load */
     scroll-padding-top: 80px;
     overflow-x: hidden;
+}
+
+/* Enable smooth scrolling after page loads */
+html.loaded {
+    scroll-behavior: smooth;
 }
 
 html, body {
