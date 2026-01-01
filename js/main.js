@@ -1,5 +1,22 @@
+// ==================== SCROLL TO TOP ON PAGE LOAD/REFRESH ====================
+// Prevent scroll restoration and force page to top on load
+if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+}
+
+// Force scroll to top immediately
+window.scrollTo(0, 0);
+
+// Also force on page show (handles back/forward navigation)
+window.addEventListener('pageshow', function(event) {
+    window.scrollTo(0, 0);
+});
+
 // ==================== PRELOADER ====================
 window.addEventListener('load', function() {
+    // Ensure we're at the top
+    window.scrollTo(0, 0);
+    
     const preloader = document.getElementById('preloader');
     setTimeout(function() {
         preloader.classList.add('hide');
@@ -8,6 +25,9 @@ window.addEventListener('load', function() {
 
 // ==================== PROFILE IMAGE LOADING ====================
 document.addEventListener('DOMContentLoaded', function() {
+    // Force scroll to top on DOM ready as well
+    window.scrollTo(0, 0);
+    
     const profileImg = document.querySelector('.profile-img');
     if (profileImg) {
         // Add loading class initially
